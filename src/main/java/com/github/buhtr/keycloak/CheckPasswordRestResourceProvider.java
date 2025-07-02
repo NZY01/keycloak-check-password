@@ -16,17 +16,11 @@ import org.keycloak.services.resources.admin.permissions.AdminPermissionEvaluato
 @RequiredArgsConstructor
 public class CheckPasswordRestResourceProvider implements AdminRealmResourceProvider, AdminRealmResourceProviderFactory {
 
-  private final KeycloakSession keycloakSession;
   private static final String PROVIDER_ID = "check-password";
 
   @Override
   public AdminRealmResourceProvider create(KeycloakSession session) {
     return this;
-  }
-
-  @Override
-  public Object getResource(KeycloakSession session, RealmModel realm, AdminPermissionEvaluator auth, AdminEventBuilder adminEvent) {
-    return new CheckPasswordResource(session, realm, auth, adminEvent);
   }
 
   @Override
@@ -38,11 +32,16 @@ public class CheckPasswordRestResourceProvider implements AdminRealmResourceProv
   }
 
   @Override
-  public void close() {
+  public String getId() {
+    return PROVIDER_ID;
   }
 
   @Override
-  public String getId() {
-    return PROVIDER_ID;
+  public Object getResource(KeycloakSession session, RealmModel realm, AdminPermissionEvaluator auth, AdminEventBuilder adminEvent) {
+    return new CheckPasswordResource(session, realm, auth);
+  }
+
+  @Override
+  public void close() {
   }
 }
