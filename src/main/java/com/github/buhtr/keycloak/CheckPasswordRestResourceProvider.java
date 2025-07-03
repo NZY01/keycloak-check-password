@@ -1,5 +1,6 @@
 package com.github.buhtr.keycloak;
 
+import jakarta.ws.rs.ext.Provider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.Config;
@@ -14,6 +15,7 @@ import org.keycloak.services.resources.admin.permissions.AdminPermissionEvaluato
  */
 @Slf4j
 @RequiredArgsConstructor
+@Provider
 public class CheckPasswordRestResourceProvider implements AdminRealmResourceProvider, AdminRealmResourceProviderFactory {
 
   private static final String PROVIDER_ID = "check-password";
