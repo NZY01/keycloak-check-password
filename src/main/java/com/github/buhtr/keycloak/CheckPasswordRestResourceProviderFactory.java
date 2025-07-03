@@ -4,14 +4,14 @@ import com.google.auto.service.AutoService;
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
-import org.keycloak.services.resource.RealmResourceProvider;
-import org.keycloak.services.resource.RealmResourceProviderFactory;
+import org.keycloak.services.resources.admin.ext.AdminRealmResourceProvider;
+import org.keycloak.services.resources.admin.ext.AdminRealmResourceProviderFactory;
 
 /**
  * @author Igor Slusarenko
  */
-@AutoService(RealmResourceProviderFactory.class)
-public class CheckPasswordRestResourceProviderFactory implements RealmResourceProviderFactory {
+@AutoService(AdminRealmResourceProviderFactory.class)
+public class CheckPasswordRestResourceProviderFactory implements AdminRealmResourceProviderFactory {
 
   /**
    * The rest endpoint can be accessed by the following path
@@ -20,7 +20,7 @@ public class CheckPasswordRestResourceProviderFactory implements RealmResourcePr
   private static final String PROVIDER_ID = "check-password";
 
   @Override
-  public RealmResourceProvider create(KeycloakSession session) {
+  public AdminRealmResourceProvider create(KeycloakSession session) {
     return new CheckPasswordRestResourceProvider(session);
   }
 

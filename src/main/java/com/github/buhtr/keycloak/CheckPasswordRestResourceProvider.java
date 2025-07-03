@@ -9,37 +9,29 @@ import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserProvider;
-import org.keycloak.services.resource.RealmResourceProvider;
+import org.keycloak.services.resources.admin.AdminEventBuilder;
+import org.keycloak.services.resources.admin.ext.AdminRealmResourceProvider;
+import org.keycloak.services.resources.admin.permissions.AdminPermissionEvaluator;
 
 /**
  * @author Igor Slusarenko
  */
 @Slf4j
 @RequiredArgsConstructor
-public class CheckPasswordRestResourceProvider implements RealmResourceProvider {
+public class CheckPasswordRestResourceProvider implements AdminRealmResourceProvider {
 
   private final KeycloakSession keycloakSession;
 
   @Override
-  public Object getResource() {
-    return this;
+  public Object getResource(KeycloakSession session, RealmModel realm, AdminPermissionEvaluator auth, AdminEventBuilder adminEvent) {
+    return new CheckPasswordResource(session, realm, auth);
   }
 
   @Override
   public void close() {
-  }
-
-  @GET
-  @Path("/{login}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Boolean check(@PathParam("login") String login, @QueryParam("password") String password) {
-    var realm = keycloakSession.getContext().getRealm();
-    var userProvider = keycloakSession.getProvider(UserProvider.class);
-    var user = userProvider.getUserByUsername(realm, login);
-
-    return user.credentialManager().isValid(UserCredentialModel.password(password));
   }
 
 }
