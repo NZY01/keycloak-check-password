@@ -22,8 +22,8 @@ public class CheckPasswordResource {
     }
 
     @POST
-    @Path("/{userId}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response validateUserPassword(@PathParam("userId") String userId, CredentialModel credentialModel) {
         auth.users().requireManage();
         var userProvider = session.getProvider(UserProvider.class);
