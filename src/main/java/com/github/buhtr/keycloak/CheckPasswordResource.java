@@ -2,7 +2,6 @@ package com.github.buhtr.keycloak;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.keycloak.credential.CredentialModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
@@ -22,19 +21,18 @@ public class CheckPasswordResource {
     }
 
     @POST
-    @Path("{userId}")
+    @Path("/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response validateUserPassword(@PathParam("userId") String userId, CredentialModel credentialModel) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Boolean validateUserPassword(@PathParam("userId") String userId, CredentialModel credentialModel) {
         auth.users().requireManage();
         var userProvider = session.getProvider(UserProvider.class);
         var user = userProvider.getUserById(realm, userId);
 
-        var isPasswordValid = user.credentialManager().isValid(UserCredentialModel.password(credentialModel.getCredentialData()));
-
-        if (isPasswordValid) {
-            return Response.ok().build();
-        } else {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+        if (user == null) {
+            return false;
         }
+
+        return user.credentialManager().isValid(UserCredentialModel.password(credentialModel.getCredentialData()));
     }
 }
